@@ -2,7 +2,7 @@
 #include "thebest/iconfig_parser.h"
 #include "ts_common.h"
 #include "fake_factory.h"
-#include "parse.h"
+#include "ts_config/parse.h"
 
 namespace TsConfig
 {
