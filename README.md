@@ -4,6 +4,7 @@ Design guidelines for starting a new app/lib with BDD/TDD in mind.
 
 ## Class diagram
 
+<!--
 ```plantuml
 @startuml
 '!theme blueprint
@@ -65,20 +66,35 @@ am ..> TheBest::f : <<create>>
 
 @enduml
 ```
+-->
+![](./bdd_swdev_eng_cd.svg)
 
 ## To build
 
-### thebestapp
+If you don't have an up-to-date GCC compiler suite already installed, do Step 1.  
+Otherwise, cd to ./thebest and do Step 2 (a, b, or both).
 
-From within thebest/src/app, run:
+### Step 1: Docker setup
+
+From within ./thebest, run:
+
+```bash
+docker run -it --rm --name thebest -v "$PWD":/home/project -w /home/project abeimler/simple-cppbuilder /bin/bash
+```
+
+Then, once in the container (in /home/project), do Step 2 (a, b, or both).
+
+### Step 2a: Building thebestapp
+
+From within ./src/app, run:
 
 ```bash
 c++ -std=c++23 -I ../lib/include/ -o thebestapp main.cpp ../lib/facade.cpp ../lib/factory.cpp ../lib/config_parser.cpp
 ```
 
-### thebestts
+### Step 2b: Building thebestts
 
-From within thebest/src/tst, run:
+From within ./src/tst, run:
 
 ```bash
 c++ -std=c++23 -I . -I ../lib/include/ -o thebestts main.cpp ts_common.cpp fake_factory.cpp ts_config/parse.cpp ../lib/facade.cpp ../lib/factory.cpp ../lib/config_parser.cpp
