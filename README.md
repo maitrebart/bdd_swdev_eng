@@ -7,11 +7,17 @@
 - [Class diagram](#class-diagram)
 - [Directory structure](#directory-structure)
 	- [Under `./thebest`](#under-thebest)
-	- [Under `./fileio`](#under-fileio)
-- [To build](#to-build)
+	- [Under `./filesysio`](#under-filesysio)
+- [To build thebest repo](#to-build-thebest-repo)
 	- [Step 1: Docker setup](#step-1-docker-setup)
 	- [Step 2a: Building `thebestapp`](#step-2a-building-thebestapp)
 	- [Step 2b: Building `thebestts`](#step-2b-building-thebestts)
+- [To build the filesysio repo](#to-build-the-filesysio-repo)
+	- [Step 2: Building `filesysio.a`](#step-2-building-filesysioa)
+- [To build the thebest repo using the filesysio lib](#to-build-the-thebest-repo-using-the-filesysio-lib)
+	- [Step 1: Copy the filesysio's files](#step-1-copy-the-filesysios-files)
+	- [Step 2: Docker setup](#step-2-docker-setup)
+	- [Step 3: Building `thebestts2`](#step-3-building-thebestts2)
 
 ## Introduction
 
@@ -51,12 +57,12 @@ namespace TsCommon {
 
 namespace TsConfig {
 	class "ParseTest1" as pt1
-	class "ParseTest2" as pt2
+	'class "ParseTest2" as pt2
 	class "test's\nmain.cpp" as m
 	hide m circle
 
 	m *..> pt1
-	m *..> pt2
+	'm *..> pt2
 
 	pt1 ..> TheBest::F : <<instantiate>>
 	pt1 ..> TsCommon::ff : <<create>>
@@ -100,17 +106,46 @@ am ..> TheBest::f : <<create>>
 /src/tst/main.cpp
 /src/tst/ts_common.cpp
 /src/tst/ts_config/parse.cpp
+/src/tst2/include/ts_config/parse.h
+/src/tst2/lib/fake_filesysio.cpp
+/src/tst2/lib/include/fake_filesysio.h
+/src/tst2/lib/include/filesysio/facade.h
+/src/tst2/lib/include/filesysio/idir_service.h
+/src/tst2/lib/include/filesysio/ifactory.h
+/src/tst2/lib/include/filesysio/ifile_service.h
+/src/tst2/lib/include/filesysio/types.h
+/src/tst2/ts_config/parse.cpp
 @endfiles
 ```
 <!--
 -->
 ![](./thebest_dir_struct.svg)
 
-### Under `./fileio`
+### Under `./filesysio`
 
-(TODO)
+<!--
+```plantuml
+@startfiles
+/Dockerfile
+/src/lib/dir_service.cpp
+/src/lib/facade.cpp
+/src/lib/factory.cpp
+/src/lib/file_service.cpp
+/src/lib/include/dir_service.h
+/src/lib/include/factory.h
+/src/lib/include/file_service.h
+/src/lib/include/filesysio/facade.h
+/src/lib/include/filesysio/idir_service.h
+/src/lib/include/filesysio/ifactory.h
+/src/lib/include/filesysio/ifile_service.h
+/src/lib/include/filesysio/types.h
+@endfiles
+```
+<!--
+-->
+![](./filesysio_dir_struct.svg)
 
-## To build
+## To build thebest repo
 
 If you don't have an up-to-date GCC compiler suite already installed, do Step 1.  
 Otherwise, cd to `./thebest` and do Step 2 (a, b, or both).
@@ -138,5 +173,64 @@ c++ -std=c++23 -I ../lib/include/ -o thebestapp main.cpp ../lib/facade.cpp ../li
 From within `./src/tst`, run:
 
 ```bash
-c++ -std=c++23 -I ./include -I ../lib/include/ -o thebestts main.cpp ts_common.cpp fake_factory.cpp ts_config/parse.cpp ../lib/facade.cpp ../lib/factory.cpp ../lib/config_parser.cpp
+c++ -std=c++23 -I ./include -I ../lib/include/ -o thebestts main.cpp ts_common.cpp fake_factory.cpp ts_config/parse.cpp \
+../lib/facade.cpp ../lib/factory.cpp ../lib/config_parser.cpp
+```
+
+## To build the filesysio repo
+
+Do Step 1 from previous section but replace `--name thebest` by `--name filesysio`.
+
+From within `./filesyio`, run:
+
+```bash
+docker run -it --rm --name filesysio -v "$PWD":/home/project -w /home/project abeimler/simple-cppbuilder /bin/bash
+```
+
+### Step 2: Building `filesysio.a`
+
+Once inside the container (in `/home/project`), from within `./src/lib`, run:
+
+```bash
+mkdir build
+c++ -c -std=c++23 -I ./include/ -o build/facade.o facade.cpp
+c++ -c -std=c++23 -I ./include/ -o build/factory.o factory.cpp
+c++ -c -std=c++23 -I ./include/ -o build/file_service.o file_service.cpp
+c++ -c -std=c++23 -I ./include/ -o build/dir_service.o dir_service.cpp
+ar rs filesysio.a build/*.o
+```
+
+## To build the thebest repo using the filesysio lib
+
+> Note: You need to build the filesysio repo first.
+
+### Step 1: Copy the filesysio's files
+
+From outside of any container, copy the following files:
+
+- public `.h` files
+  - from: filesysio's `./src/lib/include/filesysio/`
+  - to: thebest's `./src/tst2/lib/include/filesysio/`
+- the `filesysio.a` file
+  - from: filesysio's `./src/lib/`
+  - to: thebest's `./src/tst2/lib/`
+
+### Step 2: Docker setup
+
+From within `./thebest`, run:
+
+```bash
+docker run -it --rm --name thebest -v "$PWD":/home/project -w /home/project abeimler/simple-cppbuilder /bin/bash
+```
+
+Then, once in the container (in `/home/project`), do Step 3.
+
+### Step 3: Building `thebestts2`
+
+From within `./src/tst2`, run:
+
+```bash
+c++ -std=c++23 -DUSE_FILESYSIO_LIB -I ./include -I ../tst2/lib/include/ -I ../tst/include/ -I ../lib/include/ -I ./lib/include/ \
+-o thebestts2 ../tst/main.cpp ../tst/ts_common.cpp ../tst/fake_factory.cpp ../tst2/ts_config/parse.cpp ./lib/fake_filesysio.cpp \
+../lib/facade.cpp ../lib/factory.cpp ../lib/config_parser.cpp
 ```

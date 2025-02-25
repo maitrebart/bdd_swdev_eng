@@ -38,25 +38,4 @@ bool ParseTest1::run()
 	return pass;
 }
 
-bool ParseTest2::run()
-{
-	TsCommon::outputTestInfo("Starting ParseTest2");
-
-	//// arrange
-	//TsCommon::FakeFactory fakeFactory;
-	//TheBest::Facade::create(fakeFactory);
-   //
-	//std::unique_ptr<TheBest::IConfigParser> configParser =
-	//	TheBest::Facade::instance().factory().createConfigParser();
-   //
-	//// act
-	//const bool pass = configParser->parse("ts_artifacts/config1.xml");
-   const bool pass = true;
-   //
-	//// assert
-	//TsCommon::outputTestResults(pass, "ParseTest1");
-
-	return pass;
-}
-
 } // namespace TsConfig

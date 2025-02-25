@@ -10,12 +10,6 @@ public:
 	bool run();
 };
 
-class ParseTest2
-{
-public:
-	bool run();
-};
-
 } // namespace TsConfig
 
 
