@@ -5,6 +5,8 @@
 
 namespace FileSysIo
 {
+inline namespace V1_0_0
+{
 
 class Factory : public virtual IFactory
 {
@@ -19,6 +21,7 @@ class Factory : public virtual IFactory
    IDirService& m_dirService;
 };
 
+} // namespace V1_0_0
 } // namespace FileSysIo
 
 #endif // FSIO_FACTORY_H

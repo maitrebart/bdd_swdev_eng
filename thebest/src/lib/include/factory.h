@@ -5,6 +5,8 @@
 
 namespace TheBest
 {
+inline namespace V1_0_0
+{
 
 class Factory : virtual public IFactory
 {
@@ -13,6 +15,7 @@ class Factory : virtual public IFactory
    //...
 };
 
+} // namespace V1_0_0
 } // namespace TheBest
 
 #endif // THEBEST_FACTORY_H

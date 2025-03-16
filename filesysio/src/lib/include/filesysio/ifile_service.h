@@ -5,6 +5,8 @@
 
 namespace FileSysIo
 {
+inline namespace V1_0_0
+{
 
 class IFileService
 {
@@ -27,6 +29,7 @@ class IFileService
    // TODO: copy, move/rename, delete, lock
 };
 
+} // namespace V1_0_0
 } // namespace FileSysIo
 
 #endif // FSIO_IFILE_SERVICE_H

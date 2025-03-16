@@ -3,6 +3,8 @@
 
 namespace FileSysIo
 {
+inline namespace V1_0_0
+{
 
 class IFactory;
 
@@ -21,6 +23,8 @@ class Facade
    static Facade* s_pFacade;
    IFactory& m_factory;
 };
+
+} // namespace V1_0_0
 } // namespace FileSysIo
 
 #endif // FILESYSIO_FACADE_H

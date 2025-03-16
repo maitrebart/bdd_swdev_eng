@@ -5,6 +5,8 @@
 
 namespace TheBest
 {
+inline namespace V1_0_0
+{
 
 class IConfigParser;
 
@@ -15,6 +17,7 @@ class IFactory
    //...
 };
 
+} // namespace V1_0_0
 } // namespace TheBest
 
 #endif // THEBEST_IFACTORY_H

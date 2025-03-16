@@ -17,7 +17,8 @@
 - [To build the thebest repo using the filesysio lib](#to-build-the-thebest-repo-using-the-filesysio-lib)
 	- [Step 1: Copy the filesysio's files](#step-1-copy-the-filesysios-files)
 	- [Step 2: Docker setup](#step-2-docker-setup)
-	- [Step 3: Building `thebestts2`](#step-3-building-thebestts2)
+	- [Step 3a: Building `thebestapp2`](#step-3a-building-thebestapp2)
+	- [Step 3b: Building `thebestts2`](#step-3b-building-thebestts2)
 
 ## Introduction
 
@@ -165,7 +166,8 @@ Then, once in the container (in `/home/project`), do Step 2 (a, b, or both).
 From within `./src/app`, run:
 
 ```bash
-c++ -std=c++23 -I ../lib/include/ -o thebestapp main.cpp ../lib/facade.cpp ../lib/factory.cpp ../lib/config_parser.cpp
+mkdir build
+c++ -std=c++23 -I ../lib/include/ -o ./build/thebestapp `find . ../lib -name '*.cpp' -print`
 ```
 
 ### Step 2b: Building `thebestts`
@@ -173,8 +175,24 @@ c++ -std=c++23 -I ../lib/include/ -o thebestapp main.cpp ../lib/facade.cpp ../li
 From within `./src/tst`, run:
 
 ```bash
-c++ -std=c++23 -I ./include -I ../lib/include/ -o thebestts main.cpp ts_common.cpp fake_factory.cpp ts_config/parse.cpp \
-../lib/facade.cpp ../lib/factory.cpp ../lib/config_parser.cpp
+mkdir build
+c++ -std=c++23 -I ./include -I ../lib/include/ -o ./build/thebestts `find . ../lib -name '*.cpp' -print`
+```
+
+If you run the test-app:
+
+```bash
+./build/thebestts
+```
+
+it should output:
+
+```text
+INFO: Starting ParseTest1
+ERROR: ParseTest1: Could not open file: ts_artifacts/config1.xml
+FAILED : ParseTest1
+
+SUCCESS: All tests passed
 ```
 
 ## To build the filesysio repo
@@ -193,11 +211,8 @@ Once inside the container (in `/home/project`), from within `./src/lib`, run:
 
 ```bash
 mkdir build
-c++ -c -std=c++23 -I ./include/ -o build/facade.o facade.cpp
-c++ -c -std=c++23 -I ./include/ -o build/factory.o factory.cpp
-c++ -c -std=c++23 -I ./include/ -o build/file_service.o file_service.cpp
-c++ -c -std=c++23 -I ./include/ -o build/dir_service.o dir_service.cpp
-ar rs filesysio.a build/*.o
+find . -maxdepth 1 -name '*.cpp' -exec c++ -c -fPIC -std=c++23 -I ./include/ -o build/{}.o {} \;
+ar rfs ./build/libfilesysio.a build/*.o
 ```
 
 ## To build the thebest repo using the filesysio lib
@@ -206,14 +221,18 @@ ar rs filesysio.a build/*.o
 
 ### Step 1: Copy the filesysio's files
 
-From outside of any container, copy the following files:
+Since the thebest and filesysio porjects are not able to see each other when inside a container, from outside of any container, copy the following files:
 
 - public `.h` files
-  - from: filesysio's `./src/lib/include/filesysio/`
-  - to: thebest's `./src/tst2/lib/include/filesysio/`
-- the `filesysio.a` file
-  - from: filesysio's `./src/lib/`
-  - to: thebest's `./src/tst2/lib/`
+  - from: filesysio's `src/lib/include/filesysio/`
+  - to: thebest's `src/tst2/lib/include/filesysio/`
+- the `libfilesysio.a` file
+  - from: filesysio's `src/lib/build`
+  - to: thebest's `./src/tst2/build/`
+
+Notes:
+- You may need to create the destination folders.
+- You may need to chown `libfilesysio.a` before you can copy it.
 
 ### Step 2: Docker setup
 
@@ -225,12 +244,50 @@ docker run -it --rm --name thebest -v "$PWD":/home/project -w /home/project abei
 
 Then, once in the container (in `/home/project`), do Step 3.
 
-### Step 3: Building `thebestts2`
+### Step 3a: Building `thebestapp2`
+
+```bash
+c++ -std=c++23 -DUSE_FILESYSIO_LIB -I ../lib/include/ -I ../tst2/lib/include -o ./build/thebestapp2 `find . ../lib -name '*.cpp' -print` -L ../tst2/build -lfilesysio
+```
+
+If you run the app:
+
+```bash
+./build/thebestapp2
+```
+
+it should output:
+
+```text
+The file config.xml does not exist
+```
+
+### Step 3b: Building `thebestts2`
 
 From within `./src/tst2`, run:
 
 ```bash
-c++ -std=c++23 -DUSE_FILESYSIO_LIB -I ./include -I ../tst2/lib/include/ -I ../tst/include/ -I ../lib/include/ -I ./lib/include/ \
--o thebestts2 ../tst/main.cpp ../tst/ts_common.cpp ../tst/fake_factory.cpp ../tst2/ts_config/parse.cpp ./lib/fake_filesysio.cpp \
-../lib/facade.cpp ../lib/factory.cpp ../lib/config_parser.cpp
+c++ -std=c++23 -DUSE_FILESYSIO_LIB -o build/thebestts2 -I ./include -I ../tst2/lib/include -I ../tst/include -I ../lib/include -I ./lib/include ./ts_config/parse.cpp ./lib/fake_filesysio.cpp ../tst/main.cpp ../tst/fake_factory.cpp ../tst/ts_common.cpp ../lib/config_parser.cpp ../lib/factory.cpp ../lib/facade.cpp
+```
+
+If you run the test-app:
+
+```bash
+./build/thebestts2
+```
+
+it should output:
+
+```text
+INFO: Starting ParseTest1
+ERROR: ParseTest1: Could not open file: ts_artifacts/config1.xml
+FAILED : ParseTest1
+INFO: Starting ParseTest2
+This
+is
+a
+test
+SUCCESS: ParseTest2
+
+SUCCESS: All tests passed
 ```

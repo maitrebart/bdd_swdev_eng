@@ -7,6 +7,8 @@
 
 namespace FileSysIo
 {
+inline namespace V1_0_0
+{
 
 class DirService : public virtual IDirService
 {
@@ -18,6 +20,7 @@ class DirService : public virtual IDirService
    // TODO: Delete
 };
 
+} // namespace V1_0_0
 } // namespace FileSysIo
 
 #endif // FSIO_DIR_SERVICE_H
