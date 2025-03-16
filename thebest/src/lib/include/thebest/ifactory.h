@@ -10,7 +10,7 @@ class IConfigParser;
 
 class IFactory
 {
-public:
+ public:
    virtual std::unique_ptr<IConfigParser> createConfigParser() = 0;
    //...
 };

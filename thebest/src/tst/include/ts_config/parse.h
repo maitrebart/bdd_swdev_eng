@@ -6,11 +6,10 @@ namespace TsConfig
 
 class ParseTest1
 {
-public:
-	bool run();
+ public:
+   bool run();
 };
 
 } // namespace TsConfig
-
 
 #endif // TS_CONFIG_PARSE_H

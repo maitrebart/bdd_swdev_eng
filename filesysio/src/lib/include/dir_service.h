@@ -10,7 +10,7 @@ namespace FileSysIo
 
 class DirService : public virtual IDirService
 {
-public:
+ public:
    bool create(const std::filesystem::path& path) override;
    std::vector<std::string> list(const std::filesystem::path& path, bool recursive) override;
    SizeType getNumEntries(const std::filesystem::path& path, bool recursive) override;

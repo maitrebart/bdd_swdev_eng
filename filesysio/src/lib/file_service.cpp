@@ -3,27 +3,32 @@
 namespace FileSysIo
 {
 
-bool FileService::doesExist(const std::filesystem::path& path)
+bool
+FileService::doesExist(const std::filesystem::path& path)
 {
    return {};
 }
 
-EntryInfo FileService::getType(const std::filesystem::path& path)
+EntryInfo
+FileService::getType(const std::filesystem::path& path)
 {
    return {};
 }
 
-SizeType FileService::getSize(const std::filesystem::path& path)
+SizeType
+FileService::getSize(const std::filesystem::path& path)
 {
    return {};
 }
 
-FileService::RwError FileService::read(const std::filesystem::path& path, ReadCallback readCallback)
+FileService::RwError
+FileService::read(const std::filesystem::path& path, ReadCallback readCallback)
 {
    return {};
 }
 
-FileService::RwError FileService::write(const std::filesystem::path& path, WriteCallback writeCallback)
+FileService::RwError
+FileService::write(const std::filesystem::path& path, WriteCallback writeCallback)
 {
    return {};
 }

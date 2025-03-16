@@ -4,9 +4,10 @@
 namespace TsCommon
 {
 
-std::unique_ptr<TheBest::IConfigParser> FakeFactory::createConfigParser()
+std::unique_ptr<TheBest::IConfigParser>
+FakeFactory::createConfigParser()
 {
-	return std::make_unique<TsConfig::FakeConfigParser>();
+   return std::make_unique<TsConfig::FakeConfigParser>();
 }
 
 } // namespace TsCommon

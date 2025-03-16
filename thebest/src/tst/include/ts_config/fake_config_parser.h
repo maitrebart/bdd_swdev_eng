@@ -6,9 +6,9 @@
 namespace TsConfig
 {
 
-struct FakeConfigParser : public virtual TheBest::ConfigParser
+// struct FakeConfigParser : public virtual TheBest::IConfigParser // override all methods
+struct FakeConfigParser : public TheBest::ConfigParser // override specific methods
 {
-   // Override specific method(s)
    //...
 };
 

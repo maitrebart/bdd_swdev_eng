@@ -8,11 +8,13 @@ namespace TheBest
 
 class ConfigParser : public virtual IConfigParser
 {
-public:
-   std::expected<bool,std::string> parse(std::filesystem::path path) override;
+ public:
+   std::expected<bool, std::string> parse(std::filesystem::path path) override;
 
 #ifdef USE_FILESYSIO_LIB
-   std::expected<bool,std::string> parse2(std::filesystem::path path, FileSysIo::IFileService& fileService) override;
+   std::expected<bool, std::string> parse2(
+     std::filesystem::path path,
+     FileSysIo::IFileService& fileService) override;
 #endif
 };
 

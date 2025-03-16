@@ -4,9 +4,10 @@
 namespace TheBest
 {
 
-std::unique_ptr<IConfigParser> Factory::createConfigParser()
+std::unique_ptr<IConfigParser>
+Factory::createConfigParser()
 {
-	return std::make_unique<ConfigParser>();
+   return std::make_unique<ConfigParser>();
 }
 
 } // namespace TheBest

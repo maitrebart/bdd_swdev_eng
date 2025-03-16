@@ -3,17 +3,20 @@
 namespace FileSysIo
 {
 
-Factory::Factory(IFileService& fileService, IDirService& dirService) :
-   m_fileService(fileService),
-   m_dirService(dirService)
-{}
+Factory::Factory(IFileService& fileService, IDirService& dirService)
+  : m_fileService(fileService)
+  , m_dirService(dirService)
+{
+}
 
-IFileService& Factory::fileService()
+IFileService&
+Factory::fileService()
 {
    return m_fileService;
 }
 
-IDirService& Factory::dirService()
+IDirService&
+Factory::dirService()
 {
    return m_dirService;
 }

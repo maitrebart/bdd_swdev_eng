@@ -8,7 +8,7 @@ namespace FileSysIo
 
 class IDirService
 {
-public:
+ public:
    virtual bool create(const std::filesystem::path& path) = 0;
    virtual std::vector<std::string> list(const std::filesystem::path& path, bool recursive) = 0;
    virtual SizeType getNumEntries(const std::filesystem::path& path, bool recursive) = 0;

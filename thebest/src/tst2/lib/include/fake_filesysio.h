@@ -8,7 +8,7 @@ namespace FileSysIo
 
 struct FakeFileService : public virtual IFileService
 {
-public:
+ public:
    bool doesExist(const std::filesystem::path& path) override;
    EntryInfo getType(const std::filesystem::path& path) override;
    SizeType getSize(const std::filesystem::path& path) override;
@@ -19,28 +19,28 @@ public:
    std::stringstream m_readContent;
 };
 
-//class FakeDirService : public virtual IDirService
+// class FakeDirService : public virtual IDirService
 //{
-//public:
-//   bool create(const std::filesystem::path& path) override;
-//   std::vector<std::string> list(const std::filesystem::path& path, bool recursive) override;
-//   SizeType getNumEntries(const std::filesystem::path& path, bool recursive) override;
-//   bool checkIfEmpty(const std::filesystem::path& path) override;
-//   // TODO: Delete
-//};
+// public:
+//    bool create(const std::filesystem::path& path) override;
+//    std::vector<std::string> list(const std::filesystem::path& path, bool recursive) override;
+//    SizeType getNumEntries(const std::filesystem::path& path, bool recursive) override;
+//    bool checkIfEmpty(const std::filesystem::path& path) override;
+//    // TODO: Delete
+// };
 //
-//class FakeFactory : public virtual IFactory
+// class FakeFactory : public virtual IFactory
 //{
-//public:
-//   FakeFactory(IFileService& fileService, IDirService& dirService);
+// public:
+//    FakeFactory(IFileService& fileService, IDirService& dirService);
 //
-//   IFileService& fileService() override;
-//   IDirService& dirService() override;
+//    IFileService& fileService() override;
+//    IDirService& dirService() override;
 //
-//private:
-//   IFileService& m_fileService;
-//   IDirService& m_dirService;
-//};
+// private:
+//    IFileService& m_fileService;
+//    IDirService& m_dirService;
+// };
 
 } // namespace FileSysIo
 

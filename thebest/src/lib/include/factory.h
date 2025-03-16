@@ -8,7 +8,7 @@ namespace TheBest
 
 class Factory : virtual public IFactory
 {
-public:
+ public:
    std::unique_ptr<IConfigParser> createConfigParser() override;
    //...
 };

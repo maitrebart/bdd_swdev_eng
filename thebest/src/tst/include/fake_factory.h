@@ -8,7 +8,7 @@ namespace TsCommon
 
 struct FakeFactory : virtual public TheBest::IFactory
 {
-	std::unique_ptr<TheBest::IConfigParser> createConfigParser() override;
+   std::unique_ptr<TheBest::IConfigParser> createConfigParser() override;
    //...
 };
 

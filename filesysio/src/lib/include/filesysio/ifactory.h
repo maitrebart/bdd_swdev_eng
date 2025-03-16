@@ -9,7 +9,7 @@ class IDirService;
 
 class IFactory
 {
-public:
+ public:
    virtual IFileService& fileService() = 0;
    virtual IDirService& dirService() = 0;
 };

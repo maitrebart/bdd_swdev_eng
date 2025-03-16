@@ -1,11 +1,11 @@
 #ifndef FSIO_TYPES_H
 #define FSIO_TYPES_H
 
-#include <filesystem>
-#include <string>
-#include <functional>
 #include <expected>
+#include <filesystem>
+#include <functional>
 #include <optional>
+#include <string>
 
 namespace FileSysIo
 {
@@ -19,7 +19,7 @@ enum class EntryType : int
    Link
 };
 
-using EntryInfo = std::pair<EntryType,EntryType>; // direct type, final type
+using EntryInfo = std::pair<EntryType, EntryType>; // direct type, final type
 
 using SizeType = uint64_t;
 
