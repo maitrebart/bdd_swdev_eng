@@ -20,7 +20,7 @@ outputTestError(std::string msg)
 void
 outputOverallResult(bool success)
 {
-   constexpr const char* MESSAGE[] = { "FAILURE: At leats one test didn't pass", "SUCCESS: All tests passed" };
+   constexpr const char* MESSAGE[] = { "FAILURE: At least one test didn't pass", "SUCCESS: All tests passed" };
    std::cout << "\n" << MESSAGE[success] << "\n";
 }
 

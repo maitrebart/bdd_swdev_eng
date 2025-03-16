@@ -3,11 +3,11 @@
 #ifdef USE_FILESYSIO_LIB
 #include "filesysio/facade.h"
 #include "filesysio/ifile_service.h"
+
+namespace fio = FileSysIo;
 #endif
 
 #include <fstream>
-
-namespace fio = FileSysIo;
 
 namespace TheBest
 {
@@ -38,16 +38,15 @@ std::expected<bool, std::string>
 ConfigParser::parse2(std::filesystem::path path, fio::IFileService& fileService)
 {
    std::expected<bool, std::string> result;
-   auto error =
-     fileService.read(path,
-                      [](fio::IFileService::RwInfo lineInfo)
-                      {
-                         if (!lineInfo.isEof || !lineInfo.line.empty())
-                         {
-                            std::cout << lineInfo.line << "\n";
-                         }
-                         return true;
-                      });
+   auto error = fileService.read(path,
+                                 [](fio::IFileService::RwInfo lineInfo)
+                                 {
+                                    if (!lineInfo.isEof || !lineInfo.line.empty())
+                                    {
+                                       std::cout << lineInfo.line << "\n";
+                                    }
+                                    return true;
+                                 });
    if (error)
    {
       return std::unexpected("Could not open file: " + path.string());

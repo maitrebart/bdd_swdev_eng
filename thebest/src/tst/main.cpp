@@ -6,11 +6,9 @@ main(int argc, const char** argv)
 {
    bool success(true);
 
-   // success = success &&
-   TsConfig::ParseTest1().run();
+   success = TsConfig::ParseTest1().run() && success;
 #ifdef USE_FILESYSIO_LIB
-   // success = success &&
-   TsConfig::ParseTest2().run();
+   success = TsConfig::ParseTest2().run() && success;
 #endif
    //...
 

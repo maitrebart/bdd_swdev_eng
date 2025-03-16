@@ -192,7 +192,7 @@ INFO: Starting ParseTest1
 ERROR: ParseTest1: Could not open file: ts_artifacts/config1.xml
 FAILED : ParseTest1
 
-SUCCESS: All tests passed
+FAILURE: At least one test didn't pass
 ```
 
 ## To build the filesysio repo
@@ -289,5 +289,5 @@ a
 test
 SUCCESS: ParseTest2
 
-SUCCESS: All tests passed
+FAILURE: At least one test didn't pass
 ```
