@@ -7,12 +7,10 @@
 
 namespace FileSysIo
 {
-inline namespace V1_0_0
-{
 
 class DirService : public virtual IDirService
 {
- public:
+public:
    bool create(const std::filesystem::path& path) override;
    std::vector<std::string> list(const std::filesystem::path& path, bool recursive) override;
    SizeType getNumEntries(const std::filesystem::path& path, bool recursive) override;
@@ -20,7 +18,6 @@ class DirService : public virtual IDirService
    // TODO: Delete
 };
 
-} // namespace V1_0_0
 } // namespace FileSysIo
 
 #endif // FSIO_DIR_SERVICE_H

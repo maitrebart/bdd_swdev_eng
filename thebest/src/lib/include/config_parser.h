@@ -5,12 +5,10 @@
 
 namespace TheBest
 {
-inline namespace V1_0_0
-{
 
 class ConfigParser : public virtual IConfigParser
 {
- public:
+public:
    std::expected<bool, std::string> parse(std::filesystem::path path) override;
 
 #ifdef USE_FILESYSIO_LIB
@@ -18,7 +16,6 @@ class ConfigParser : public virtual IConfigParser
 #endif
 };
 
-} // namespace V1_0_0
 } // namespace TheBest
 
 #endif // THEBEST_CONFIG_PARSER_H

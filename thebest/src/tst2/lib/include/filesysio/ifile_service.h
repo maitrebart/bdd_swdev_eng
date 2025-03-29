@@ -5,12 +5,10 @@
 
 namespace FileSysIo
 {
-inline namespace V1_0_0
-{
 
 class IFileService
 {
- public:
+public:
    struct RwInfo
    {
       std::string line;
@@ -21,6 +19,8 @@ class IFileService
    using WriteCallback = std::function<RwInfo()>;
    using RwError = std::optional<std::string>;
 
+   virtual ~IFileService() = default;
+
    virtual bool doesExist(const std::filesystem::path& path) = 0;
    virtual EntryInfo getType(const std::filesystem::path& path) = 0;
    virtual SizeType getSize(const std::filesystem::path& path) = 0;
@@ -29,7 +29,6 @@ class IFileService
    // TODO: copy, move/rename, delete, lock
 };
 
-} // namespace V1_0_0
 } // namespace FileSysIo
 
 #endif // FSIO_IFILE_SERVICE_H

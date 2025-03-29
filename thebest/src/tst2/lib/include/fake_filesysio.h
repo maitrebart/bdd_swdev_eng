@@ -8,7 +8,7 @@ namespace FileSysIo
 
 struct FakeFileService : public virtual IFileService
 {
- public:
+public:
    bool doesExist(const std::filesystem::path& path) override;
    EntryInfo getType(const std::filesystem::path& path) override;
    SizeType getSize(const std::filesystem::path& path) override;

@@ -5,12 +5,10 @@
 
 namespace FileSysIo
 {
-inline namespace V1_0_0
-{
 
 class FileService : public virtual IFileService
 {
- public:
+public:
    bool doesExist(const std::filesystem::path& path) override;
    EntryInfo getType(const std::filesystem::path& path) override;
    SizeType getSize(const std::filesystem::path& path) override;
@@ -19,7 +17,6 @@ class FileService : public virtual IFileService
    // TODO: copy, move/rename, delete, lock
 };
 
-} // namespace V1_0_0
 } // namespace FileSysIo
 
 #endif // FSIO_FILE_SERVICE_H

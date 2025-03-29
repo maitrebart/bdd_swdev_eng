@@ -1,6 +1,6 @@
 ---
 BasedOnStyle: Mozilla
-AccessModifierOffset: -2
+AccessModifierOffset: -3
 AlignAfterOpenBracket: Align
 AlignArrayOfStructures: None
 AlignConsecutiveAssignments:
@@ -81,7 +81,7 @@ CommentPragmas: "^ IWYU pragma:"
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 2
-ContinuationIndentWidth: 2
+ContinuationIndentWidth: 3
 Cpp11BracedListStyle: false
 DeriveLineEnding: true
 DerivePointerAlignment: false

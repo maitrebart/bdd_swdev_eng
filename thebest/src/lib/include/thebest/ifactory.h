@@ -5,19 +5,18 @@
 
 namespace TheBest
 {
-inline namespace V1_0_0
-{
 
 class IConfigParser;
 
 class IFactory
 {
- public:
+public:
+   virtual ~IFactory() = default;
+
    virtual std::unique_ptr<IConfigParser> createConfigParser() = 0;
    //...
 };
 
-} // namespace V1_0_0
 } // namespace TheBest
 
 #endif // THEBEST_IFACTORY_H

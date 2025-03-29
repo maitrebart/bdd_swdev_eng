@@ -9,10 +9,11 @@
 	- [Under `./thebest`](#under-thebest)
 	- [Under `./filesysio`](#under-filesysio)
 - [To build thebest repo](#to-build-thebest-repo)
-	- [Step 1: Docker setup](#step-1-docker-setup)
+	- [Step 1: Docker setup for thebest](#step-1-docker-setup-for-thebest)
 	- [Step 2a: Building `thebestapp`](#step-2a-building-thebestapp)
 	- [Step 2b: Building `thebestts`](#step-2b-building-thebestts)
 - [To build the filesysio repo](#to-build-the-filesysio-repo)
+	- [Step 1: Docker setup for filesysio](#step-1-docker-setup-for-filesysio)
 	- [Step 2: Building `filesysio.a`](#step-2-building-filesysioa)
 - [To build the thebest repo using the filesysio lib](#to-build-the-thebest-repo-using-the-filesysio-lib)
 	- [Step 1: Copy the filesysio's files](#step-1-copy-the-filesysios-files)
@@ -149,40 +150,38 @@ am ..> TheBest::f : <<create>>
 ## To build thebest repo
 
 If you don't have an up-to-date GCC compiler suite already installed, do Step 1.  
-Otherwise, cd to `./thebest` and do Step 2 (a, b, or both).
+Otherwise, cd to `./thebest` and do Step 2 (a, or b, or both).
 
-### Step 1: Docker setup
+### Step 1: Docker setup for thebest
 
 From within `./thebest`, run:
 
 ```bash
-docker run -it --rm --name thebest -v "$PWD":/home/project -w /home/project abeimler/simple-cppbuilder /bin/bash
+./runbuildenv.sh
 ```
 
-Then, once in the container (in `/home/project`), do Step 2 (a, b, or both).
+This will start a container and you'll end up in `/home/project`). Then do Step 2 (a, or b, or both).
 
 ### Step 2a: Building `thebestapp`
 
-From within `./src/app`, run:
+From within the container, in `/home/project`, run:
 
 ```bash
-mkdir build
-c++ -std=c++23 -I ../lib/include/ -o ./build/thebestapp `find . ../lib -name '*.cpp' -print`
+./buildapp.sh
 ```
 
 ### Step 2b: Building `thebestts`
 
-From within `./src/tst`, run:
+From within the container, in `/home/project`, run:
 
 ```bash
-mkdir build
-c++ -std=c++23 -I ./include -I ../lib/include/ -o ./build/thebestts `find . ../lib -name '*.cpp' -print`
+./buildtst.sh
 ```
 
 If you run the test-app:
 
 ```bash
-./build/thebestts
+./src/tst/build/thebestts
 ```
 
 it should output:
@@ -197,22 +196,25 @@ FAILURE: At least one test didn't pass
 
 ## To build the filesysio repo
 
-Do Step 1 from previous section but replace `--name thebest` by `--name filesysio`.
+If you don't have an up-to-date GCC compiler suite already installed, do Step 1.  
+Otherwise, cd to `./filesysio` and do Step 2 (a, or b, or both).
 
-From within `./filesyio`, run:
+### Step 1: Docker setup for filesysio
+
+From within `./filesysio`, run:
 
 ```bash
-docker run -it --rm --name filesysio -v "$PWD":/home/project -w /home/project abeimler/simple-cppbuilder /bin/bash
+./runbuildenv.sh
 ```
+
+This will start a container and you'll end up in `/home/project`). Then do Step 2 (a, or b, or both).
 
 ### Step 2: Building `filesysio.a`
 
-Once inside the container (in `/home/project`), from within `./src/lib`, run:
+From within the container, in `/home/project`, run:
 
 ```bash
-mkdir build
-find . -maxdepth 1 -name '*.cpp' -exec c++ -c -fPIC -std=c++23 -I ./include/ -o build/{}.o {} \;
-ar rfs ./build/libfilesysio.a build/*.o
+./buildlib.sh
 ```
 
 ## To build the thebest repo using the filesysio lib
@@ -221,39 +223,37 @@ ar rfs ./build/libfilesysio.a build/*.o
 
 ### Step 1: Copy the filesysio's files
 
-Since the thebest and filesysio porjects are not able to see each other when inside a container, from outside of any container, copy the following files:
+From outside any container, in `./thebest`, run:
 
-- public `.h` files
-  - from: filesysio's `src/lib/include/filesysio/`
-  - to: thebest's `src/tst2/lib/include/filesysio/`
-- the `libfilesysio.a` file
-  - from: filesysio's `src/lib/build`
-  - to: thebest's `./src/tst2/build/`
+```bash
+./copyfilesysio.sh
+```
 
 Notes:
-- You may need to create the destination folders.
-- You may need to chown `libfilesysio.a` before you can copy it.
+- You may need to *chown* `libfilesysio.a` before you can copy it.
 
 ### Step 2: Docker setup
 
-From within `./thebest`, run:
+If not already done, from within `./thebest`, run:
 
 ```bash
-docker run -it --rm --name thebest -v "$PWD":/home/project -w /home/project abeimler/simple-cppbuilder /bin/bash
+./runbuildenv.sh
 ```
 
-Then, once in the container (in `/home/project`), do Step 3.
+This will start a container and you'll end up in `/home/project`). Then do Step 3.
 
 ### Step 3a: Building `thebestapp2`
 
+From within the container, in `/home/project`, run:
+
 ```bash
-c++ -std=c++23 -DUSE_FILESYSIO_LIB -I ../lib/include/ -I ../tst2/lib/include -o ./build/thebestapp2 `find . ../lib -name '*.cpp' -print` -L ../tst2/build -lfilesysio
+./buildapp2.sh
 ```
 
 If you run the app:
 
 ```bash
-./build/thebestapp2
+./src/app/build/thebestapp2
 ```
 
 it should output:
@@ -264,16 +264,16 @@ The file config.xml does not exist
 
 ### Step 3b: Building `thebestts2`
 
-From within `./src/tst2`, run:
+From within the container, in `/home/project`, run:
 
 ```bash
-c++ -std=c++23 -DUSE_FILESYSIO_LIB -o build/thebestts2 -I ./include -I ../tst2/lib/include -I ../tst/include -I ../lib/include -I ./lib/include ./ts_config/parse.cpp ./lib/fake_filesysio.cpp ../tst/main.cpp ../tst/fake_factory.cpp ../tst/ts_common.cpp ../lib/config_parser.cpp ../lib/factory.cpp ../lib/facade.cpp
+./buildtst2.sh
 ```
 
 If you run the test-app:
 
 ```bash
-./build/thebestts2
+./src/tst2/build/thebestts2
 ```
 
 it should output:

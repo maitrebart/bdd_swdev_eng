@@ -48,7 +48,8 @@ ParseTest2::run()
 
    // arrange (thebest)
    TsCommon::FakeFactory fakeFactory;
-   TheBest::Facade::create(fakeFactory);
+   TheBest::Facade::replaceFactory(fakeFactory);
+
    std::unique_ptr<TheBest::IConfigParser> configParser = TheBest::Facade::instance().factory().createConfigParser();
 
    // arrange (filesysio)

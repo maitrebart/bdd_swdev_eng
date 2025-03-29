@@ -3,8 +3,6 @@
 
 namespace TheBest
 {
-inline namespace V1_0_0
-{
 
 class IFactory;
 // forward-declarations of main classes' interface
@@ -12,25 +10,25 @@ class IFactory;
 
 class Facade
 {
- public:
-   static void create();                  // for thebest app (uses default factory)
-   static void create(IFactory& factory); // for ext app or tst
+public:
+   static void create();                          // for thebest app (uses default factory)
+   static void create(IFactory& factory);         // for ext app or tst
+   static void replaceFactory(IFactory& factory); // for ext app or tst
    static Facade& instance();
 
    IFactory& factory();
 
    // accessors to main classes' interface
    //...
- private:
+private:
    Facade(IFactory& factory);
 
    static Facade* s_pFacade;
-   IFactory& m_factory;
+   IFactory* m_pFactory{ nullptr };
    // members to main classes' interface
    //...
 };
 
-} // namespace V1_0_0
 } // namespace TheBest
 
 #endif // THEBEST_FACADE_H

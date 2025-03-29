@@ -13,12 +13,12 @@
 
 namespace TheBest
 {
-inline namespace V1_0_0
-{
 
 class IConfigParser
 {
- public:
+public:
+   virtual ~IConfigParser() = default;
+
    virtual std::expected<bool, std::string> parse(std::filesystem::path path) = 0;
    //...
 
@@ -27,7 +27,6 @@ class IConfigParser
 #endif
 };
 
-}
 } // namespace TheBest
 
 #endif // THEBEST_ICONFIG_PARSER_H

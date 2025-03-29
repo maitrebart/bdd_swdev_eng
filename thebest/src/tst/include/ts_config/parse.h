@@ -6,7 +6,7 @@ namespace TsConfig
 
 class ParseTest1
 {
- public:
+public:
    bool run();
 };
 
